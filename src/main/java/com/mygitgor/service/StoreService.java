@@ -1,34 +1,18 @@
 package com.mygitgor.service;
 
 import com.mygitgor.model.Store;
-import com.mygitgor.repository.StoreRepository;
 
+import java.util.Date;
 import java.util.List;
 
-public class StoreService {
-    private final StoreRepository storeRepository;
-
-    public StoreService(StoreRepository storeRepository) {
-        this.storeRepository = storeRepository;
-    }
-
-    public void addStore(Store store) {
-        storeRepository.addStore(store);
-    }
-
-    public void updateStore(Store store) {
-        storeRepository.updateStore(store);
-    }
-
-    public void removeStore(String storeName) {
-        storeRepository.removeStore(storeName);
-    }
-
-    public Store findStoreByName(String storeName) {
-        return storeRepository.findStoreByName(storeName);
-    }
-
-    public List<Store> findAllStores() {
-        return storeRepository.findAllStores();
-    }
+public interface StoreService {
+    void addStore(Store store);
+    void updateStore(Store store);
+    void removeStore(String storeName);
+    Store findStoreByName(String storeName);
+    List<Store> findAllStores();
+    void addProductToStore(String storeName,String productCode,double price,Date productionDate,Date expirationDate, int quantity);
+    void sellProduct(String storeName, String productName, int quantity);
+    void returnProductToStock(String storeName, String productName, int quantity);
+    void checkAndReturnExpiredProducts();
 }
