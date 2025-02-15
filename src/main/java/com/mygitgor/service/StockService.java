@@ -1,30 +1,31 @@
 package com.mygitgor.service;
 
+import com.mygitgor.model.Product;
 import com.mygitgor.model.Stock;
+import com.mygitgor.repository.ProductRepository;
 import com.mygitgor.repository.StockRepository;
 
 import java.util.List;
 
 public class StockService {
-    private final StockRepository stockRepository;
+    private StockRepository stockRepository;
+    private ProductRepository productRepository;
 
-    public StockService(StockRepository stockRepository) {
+    public StockService(StockRepository stockRepository,
+                        ProductRepository productRepository)
+    {
         this.stockRepository = stockRepository;
+        this.productRepository = productRepository;
     }
 
-    public void addStock(String productCode, int quantity) {
-        if (productCode == null || productCode.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product code cannot be null or empty");
+    public void addStock(String productCode, int quantity)
+    {
+        Product product = productRepository.findById(productCode);
+        if (product != null) {
+            stockRepository.addStock(productCode, quantity);
+        } else {
+            throw new IllegalArgumentException("Product not found");
         }
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than zero");
-        }
-
-        Stock stock = new Stock();
-        stock.setProductCode(productCode);
-        stock.setQuantity(quantity);
-
-        stockRepository.addStock(stock);
     }
 
     public void updateStock(Stock stock) {

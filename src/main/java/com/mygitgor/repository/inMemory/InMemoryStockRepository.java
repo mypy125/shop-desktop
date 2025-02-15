@@ -6,32 +6,36 @@ import com.mygitgor.repository.StockRepository;
 import java.util.*;
 
 public class InMemoryStockRepository implements StockRepository {
-    private final Map<String, Stock> stockMap = new HashMap<>();
+    private final Map<String, Stock> stocks = new HashMap<>();
 
     @Override
-    public void addStock(Stock stock) {
-        stockMap.put(stock.getProduct().getCode(), stock);
+    public void addStock(String productCode, int quantity) {
+        Stock stock = stocks.get(productCode);
+        if (stock == null) {
+            stock = new Stock(productCode, quantity);
+        } else {
+            stock.setQuantity(stock.getQuantity() + quantity);
+        }
+        stocks.put(productCode, stock);
     }
 
     @Override
     public void updateStock(Stock stock) {
-        if (stockMap.containsKey(stock.getProduct().getCode())) {
-            stockMap.put(stock.getProduct().getCode(), stock);
-        }
+        stocks.put(stock.getProductCode(), stock);
     }
 
     @Override
     public void removeStock(String productCode) {
-        stockMap.remove(productCode);
+        stocks.remove(productCode);
     }
 
     @Override
     public Stock findStockByProductCode(String productCode) {
-        return stockMap.get(productCode);
+        return stocks.get(productCode);
     }
 
     @Override
     public List<Stock> findAllStocks() {
-        return new ArrayList<>(stockMap.values());
+        return new ArrayList<>(stocks.values());
     }
 }

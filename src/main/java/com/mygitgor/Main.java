@@ -1,6 +1,8 @@
 package com.mygitgor;
 
 import com.mygitgor.GUI.Dashboard;
+import com.mygitgor.repository.ProductRepository;
+import com.mygitgor.repository.StockRepository;
 import com.mygitgor.repository.inMemory.InMemoryProductRepository;
 import com.mygitgor.repository.inMemory.InMemoryStockRepository;
 import com.mygitgor.repository.inMemory.InMemoryStoreRepository;
@@ -13,8 +15,10 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ProductService productService = new ProductService(new InMemoryProductRepository());
-            StockService stockService = new StockService(new InMemoryStockRepository());
+            ProductRepository productRepository = new InMemoryProductRepository();
+            StockRepository stockRepository = new InMemoryStockRepository();
+            ProductService productService = new ProductService(productRepository);
+            StockService stockService = new StockService(stockRepository, productRepository);
             StoreService storeService = new StoreService(new InMemoryStoreRepository());
 
             Dashboard dashboard = new Dashboard(productService, stockService, storeService);

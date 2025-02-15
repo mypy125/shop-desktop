@@ -5,15 +5,12 @@ public class Stock {
     private Product product;
     private int quantity;
 
-    public Stock() {
-    }
-
-    public Stock(String productCode, Product product, int quantity) {
+    public Stock(String productCode, int quantity) {
         this.productCode = productCode;
-        this.product = product;
         this.quantity = quantity;
     }
 
+    // Getters and Setters
     public String getProductCode() {
         return productCode;
     }
@@ -35,9 +32,6 @@ public class Stock {
     }
 
     public void setQuantity(int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative");
-        }
         this.quantity = quantity;
     }
 }
