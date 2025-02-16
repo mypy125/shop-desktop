@@ -15,7 +15,7 @@ public class Stock extends BaseEntity{
     @Column(nullable = false)
     private String productCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 

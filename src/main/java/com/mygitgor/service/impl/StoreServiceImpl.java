@@ -95,7 +95,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public void returnProductToStock(String storeName, String productCode, int quantity) {
-        Store store = storeRepository.findByName(storeName);
+        Store store = storeRepository.findByNameWithStocks(storeName);
         if (store == null) {
             throw new IllegalArgumentException("Store not found: " + storeName);
         }
@@ -106,8 +106,9 @@ public class StoreServiceImpl implements StoreService {
         }
 
         stock.setQuantity(stock.getQuantity() + quantity);
-        storeRepository.save(store);
+        stockRepository.save(stock);
     }
+
 
     @Override
     public void checkAndReturnExpiredProducts() {
