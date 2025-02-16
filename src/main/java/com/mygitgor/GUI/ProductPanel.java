@@ -2,6 +2,9 @@ package com.mygitgor.GUI;
 
 import com.mygitgor.model.Product;
 import com.mygitgor.service.ProductService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductPanel extends JPanel {
     private ProductService productService;
 
@@ -95,7 +101,7 @@ public class ProductPanel extends JPanel {
 
         String code = (String) productTable.getValueAt(selectedRow, 0);
 
-        Product product = productService.findById(code);
+        Product product = productService.findByCode(code);
         if (product == null) {
             JOptionPane.showMessageDialog(this, "Product not found", "Error", JOptionPane.ERROR_MESSAGE);
             return;

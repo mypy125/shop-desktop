@@ -3,15 +3,15 @@ package com.mygitgor.service.impl;
 import com.mygitgor.model.Product;
 import com.mygitgor.repository.ProductRepository;
 import com.mygitgor.service.ProductService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private ProductRepository productRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private final ProductRepository productRepository;
 
     @Override
     public void addProduct(Product product) {
@@ -20,17 +20,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProduct(Product product) {
-        productRepository.update(product);
+        productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(String code) {
-        productRepository.delete(code);
+        Product product = productRepository.findByCode(code);
+        if (product != null) {
+            productRepository.delete(product);
+        } else {
+            throw new IllegalArgumentException("Product not found with code: " + code);
+        }
     }
 
     @Override
-    public Product findById(String code) {
-        return productRepository.findById(code);
+    public Product findByCode(String code) {
+        return productRepository.findByCode(code);
     }
 
     @Override

@@ -1,13 +1,8 @@
 package com.mygitgor.repository;
 
 import com.mygitgor.model.Store;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface StoreRepository {
-    void addStore(Store store);
-    void updateStore(Store store);
-    void removeStore(String storeName);
-    Store findStoreByName(String storeName);
-    List<Store> findAllStores();
+public interface StoreRepository extends JpaRepository<Store,Long> {
+    Store findByName(String name);
 }

@@ -1,45 +1,23 @@
 package com.mygitgor.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
-import java.util.Objects;
 
-public class Store {
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Store extends BaseEntity{
+    @Column(unique = true, nullable = false)
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
     private List<Stock> stocks;
-
-    public Store() {
-    }
-
-    public Store(String name, List<Stock> stocks) {
-        this.name = name;
-        this.stocks = stocks;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Stock> getStocks() {
-        return stocks;
-    }
-
-    public void setStocks(List<Stock> stocks) {
-        this.stocks = stocks;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Store store = (Store) o;
-        return Objects.equals(name, store.name) && Objects.equals(stocks, store.stocks);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, stocks);
-    }
 }

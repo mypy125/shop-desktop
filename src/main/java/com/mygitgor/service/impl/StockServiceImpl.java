@@ -2,78 +2,67 @@ package com.mygitgor.service.impl;
 
 import com.mygitgor.model.Product;
 import com.mygitgor.model.Stock;
-import com.mygitgor.model.Store;
 import com.mygitgor.repository.ProductRepository;
 import com.mygitgor.repository.StockRepository;
-import com.mygitgor.repository.StoreRepository;
 import com.mygitgor.service.StockService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class StockServiceImpl implements StockService {
-    private StockRepository stockRepository;
-    private ProductRepository productRepository;
-
-    public StockServiceImpl(StockRepository stockRepository, ProductRepository productRepository) {
-        this.stockRepository = stockRepository;
-        this.productRepository = productRepository;
-    }
+    private final StockRepository stockRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public void addStock(String productCode, int quantity) {
-        Product product = productRepository.findById(productCode);
+        Product product = productRepository.findByCode(productCode);
         if (product == null) {
-            product = new Product();
-            product.setCode(productCode);
-            product.setPrice(0.0);
-            product.setProductionDate(new Date());
-            product.setExpirationDate(new Date());
-            productRepository.save(product);
+            throw new IllegalArgumentException("Product with code " + productCode + " not found.");
         }
 
-        Stock stock = stockRepository.findStockByProductCode(productCode);
+        Stock stock = stockRepository.findByProductCode(productCode);
         if (stock == null) {
             stock = new Stock();
             stock.setProductCode(productCode);
             stock.setProduct(product);
             stock.setQuantity(quantity);
-            stockRepository.addStock(stock);
         } else {
-            // If the stock exists, update the quantity
             stock.setQuantity(stock.getQuantity() + quantity);
-            stockRepository.updateStock(stock);
         }
+        stockRepository.save(stock);
     }
 
     @Override
     public void updateStock(Stock stock) {
-        stockRepository.updateStock(stock);
+        stockRepository.save(stock);
     }
 
     @Override
     public void removeStock(String productCode) {
-        stockRepository.removeStock(productCode);
+        stockRepository.deleteByProductCode(productCode);
     }
 
     @Override
     public Stock findStockByProductCode(String productCode) {
-        return stockRepository.findStockByProductCode(productCode);
+        return stockRepository.findByProductCode(productCode);
     }
 
     @Override
     public List<Stock> findAllStocks() {
-        return stockRepository.findAllStocks();
+        return stockRepository.findAll();
     }
 
     @Override
     public void moveStockToStore(String storeName, String productCode, int quantity) {
-        Stock stock = stockRepository.findStockByProductCode(productCode);
+        Stock stock = stockRepository.findByProductCode(productCode);
         if (stock != null && stock.getQuantity() >= quantity) {
             stock.setQuantity(stock.getQuantity() - quantity);
-            stockRepository.updateStock(stock);
+            stockRepository.save(stock);
         } else {
-            throw new IllegalArgumentException("Not enough stock or stock not found");
+            throw new IllegalArgumentException("Not enough stock or stock not found.");
         }
     }
 }

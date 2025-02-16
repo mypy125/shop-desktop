@@ -3,12 +3,18 @@ package com.mygitgor.GUI;
 import com.mygitgor.model.Product;
 import com.mygitgor.model.Stock;
 import com.mygitgor.service.StockService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+@Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class StockPanel extends JPanel {
     private JTable stockTable;
     private JButton addButton, removeButton, moveToStoreButton;

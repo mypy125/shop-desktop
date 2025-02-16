@@ -7,10 +7,9 @@ import java.util.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryStockRepository implements StockRepository {
+public class InMemoryStockRepository  {
     private final Map<String, Stock> stocks = new ConcurrentHashMap<>();
 
-    @Override
     public void addStock(Stock stock) {
         if (stock == null) {
             throw new IllegalArgumentException("Stock cannot be null.");
@@ -25,7 +24,6 @@ public class InMemoryStockRepository implements StockRepository {
         stocks.put(stock.getProductCode(), stock);
     }
 
-    @Override
     public void updateStock(Stock stock) {
         if (stock == null) {
             throw new IllegalArgumentException("Stock cannot be null.");
@@ -40,7 +38,6 @@ public class InMemoryStockRepository implements StockRepository {
         stocks.put(stock.getProductCode(), stock);
     }
 
-    @Override
     public void removeStock(String productCode) {
         if (productCode == null || productCode.trim().isEmpty()) {
             throw new IllegalArgumentException("Product code cannot be null or empty.");
@@ -48,7 +45,6 @@ public class InMemoryStockRepository implements StockRepository {
         stocks.remove(productCode);
     }
 
-    @Override
     public Stock findStockByProductCode(String productCode) {
         if (productCode == null || productCode.trim().isEmpty()) {
             throw new IllegalArgumentException("Product code cannot be null or empty.");
@@ -56,7 +52,6 @@ public class InMemoryStockRepository implements StockRepository {
         return stocks.get(productCode);
     }
 
-    @Override
     public List<Stock> findAllStocks() {
         return new ArrayList<>(stocks.values());
     }

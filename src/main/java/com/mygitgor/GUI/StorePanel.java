@@ -2,6 +2,9 @@ package com.mygitgor.GUI;
 
 import com.mygitgor.model.Store;
 import com.mygitgor.service.StoreService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,14 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
+@Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class StorePanel extends JPanel {
     private StoreService storeService;
     private JTable storeTable;

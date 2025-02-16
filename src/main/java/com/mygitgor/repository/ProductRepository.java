@@ -1,13 +1,10 @@
 package com.mygitgor.repository;
 
 import com.mygitgor.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface ProductRepository {
-    void save(Product product);
-    void update(Product product);
-    void delete(String code);
-    Product findById(String code);
-    List<Product> findAll();
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Product findByCode(String code);
 }
