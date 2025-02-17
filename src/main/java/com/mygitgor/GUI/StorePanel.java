@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -21,7 +23,7 @@ import java.util.List;
 public class StorePanel extends JPanel {
     private StoreService storeService;
     private JTable storeTable;
-    private JButton addButton, editButton, deleteButton, sellButton, returnButton, checkExpiredButton, addProductButton;
+    private JButton addButton, editButton, deleteButton, sellButton, returnButton, checkExpiredButton, addProductButton, viewProductsButton;
 
     public StorePanel(StoreService storeService) {
         this.storeService = storeService;
@@ -42,6 +44,7 @@ public class StorePanel extends JPanel {
         returnButton = new JButton("Return Product");
         checkExpiredButton = new JButton("Check Expired Products");
         addProductButton = new JButton("Add Product");
+        viewProductsButton = new JButton("View Products");
 
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
@@ -50,6 +53,7 @@ public class StorePanel extends JPanel {
         buttonPanel.add(returnButton);
         buttonPanel.add(checkExpiredButton);
         buttonPanel.add(addProductButton);
+        buttonPanel.add(viewProductsButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -60,6 +64,7 @@ public class StorePanel extends JPanel {
         returnButton.addActionListener(e -> returnProduct());
         checkExpiredButton.addActionListener(e -> checkExpiredProducts());
         addProductButton.addActionListener(e -> addProductToStore());
+        viewProductsButton.addActionListener(e -> viewStoreProducts());
 
         refreshStoreTable();
     }
@@ -84,7 +89,7 @@ public class StorePanel extends JPanel {
 
                 Store store = new Store();
                 store.setName(name);
-                store.setStocks(new ArrayList<>());
+                store.setStoreStocks(new ArrayList<>());
 
                 storeService.addStore(store);
                 refreshStoreTable();
@@ -93,6 +98,7 @@ public class StorePanel extends JPanel {
             }
         }
     }
+
 
     private void editStore() {
         int selectedRow = storeTable.getSelectedRow();
@@ -274,14 +280,68 @@ public class StorePanel extends JPanel {
         }
     }
 
+    private void viewStoreProducts() {
+        int selectedRow = storeTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Select a store to view products", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String storeName = (String) storeTable.getValueAt(selectedRow, 0);
+        Store store = storeService.findStoreByName(storeName);
+
+        if (store == null || store.getStoreStocks().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No products found in the selected store", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        StringBuilder productList = new StringBuilder();
+        for (var storeStock : store.getStoreStocks()) {
+            productList.append("Product Code: ").append(storeStock.getStock().getProductCode())
+                    .append(", Quantity: ").append(storeStock.getQuantity())
+                    .append(", Price: ").append(storeStock.getStock().getProduct().getPrice())
+                    .append("\n");
+        }
+
+        JTextArea textArea = new JTextArea(productList.toString());
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+
+        JOptionPane.showMessageDialog(this, scrollPane, "Store Products", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+
+//    private void refreshStoreTable() {
+//        List<Store> stores = storeService.findAllStores();
+//        DefaultTableModel model = new DefaultTableModel();
+//        model.addColumn("Store Name");
+//
+//        for (Store store : stores) {
+//            model.addRow(new Object[]{store.getName()});
+//        }
+//        storeTable.setModel(model);
+//    }
+
     private void refreshStoreTable() {
         List<Store> stores = storeService.findAllStores();
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Store Name");
+        model.addColumn("Products");
 
         for (Store store : stores) {
-            model.addRow(new Object[]{store.getName()});
+            String products = store.getStoreStocks().isEmpty() ? "No products" :
+                    store.getStoreStocks().stream()
+                            .map(ss -> ss.getStock().getProductCode() + " (" + ss.getQuantity() + ")")
+                            .collect(Collectors.joining(", "));
+
+            model.addRow(new Object[]{store.getName(), products});
         }
+
         storeTable.setModel(model);
     }
+
+
+
 }

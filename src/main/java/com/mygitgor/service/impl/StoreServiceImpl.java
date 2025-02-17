@@ -3,6 +3,7 @@ package com.mygitgor.service.impl;
 import com.mygitgor.model.Product;
 import com.mygitgor.model.Stock;
 import com.mygitgor.model.Store;
+import com.mygitgor.model.StoreStock;
 import com.mygitgor.repository.ProductRepository;
 import com.mygitgor.repository.StockRepository;
 import com.mygitgor.repository.StoreRepository;
@@ -69,29 +70,35 @@ public class StoreServiceImpl implements StoreService {
             stock.setProductCode(productCode);
             stock.setProduct(product);
             stock.setQuantity(quantity);
-            store.getStocks().add(stock);
-        } else {
-            stock.setQuantity(stock.getQuantity() + quantity);
+            stockRepository.save(stock);
         }
 
+        StoreStock storeStock = new StoreStock();
+        storeStock.setStore(store);
+        storeStock.setStock(stock);
+        storeStock.setQuantity(quantity);
+
+        store.getStoreStocks().add(storeStock);
         storeRepository.save(store);
+
     }
 
     @Override
     public void sellProduct(String storeName, String productCode, int quantity) {
-        Store store = storeRepository.findByName(storeName);
+        Store store = storeRepository.findByNameWithStocks(storeName);
         if (store == null) {
             throw new IllegalArgumentException("Store not found: " + storeName);
         }
 
-        Stock stock = findStockByProductCode(store, productCode);
-        if (stock == null || stock.getQuantity() < quantity) {
+        StoreStock storeStock = findStoreStockByProductCode(store, productCode);
+        if (storeStock == null || storeStock.getQuantity() < quantity) {
             throw new IllegalArgumentException("Not enough product in stock or product not found.");
         }
 
-        stock.setQuantity(stock.getQuantity() - quantity);
+        storeStock.setQuantity(storeStock.getQuantity() - quantity);
         storeRepository.save(store);
     }
+
 
     @Override
     public void returnProductToStock(String storeName, String productCode, int quantity) {
@@ -100,13 +107,13 @@ public class StoreServiceImpl implements StoreService {
             throw new IllegalArgumentException("Store not found: " + storeName);
         }
 
-        Stock stock = findStockByProductCode(store, productCode);
-        if (stock == null) {
+        StoreStock storeStock = findStoreStockByProductCode(store, productCode);
+        if (storeStock == null) {
             throw new IllegalArgumentException("Product not found in store.");
         }
 
-        stock.setQuantity(stock.getQuantity() + quantity);
-        stockRepository.save(stock);
+        storeStock.setQuantity(storeStock.getQuantity() + quantity);
+        storeRepository.save(store);
     }
 
 
@@ -114,20 +121,24 @@ public class StoreServiceImpl implements StoreService {
     public void checkAndReturnExpiredProducts() {
         List<Store> stores = storeRepository.findAll();
         Date currentDate = new Date();
+
         for (Store store : stores) {
-            for (Stock stock : store.getStocks()) {
-                if (stock.getProduct().getExpirationDate().before(currentDate)) {
-                    stock.setQuantity(0);
+            for (StoreStock storeStock : store.getStoreStocks()) {
+                Product product = storeStock.getStock().getProduct();
+
+                if (product.getExpirationDate().before(currentDate)) {
+                    storeStock.setQuantity(0);
                 }
             }
             storeRepository.save(store);
         }
     }
 
-    private Stock findStockByProductCode(Store store, String productCode) {
-        return store.getStocks().stream()
-                .filter(stock -> stock.getProductCode().equals(productCode))
+    private StoreStock findStoreStockByProductCode(Store store, String productCode) {
+        return store.getStoreStocks().stream()
+                .filter(storeStock -> storeStock.getStock().getProductCode().equals(productCode))
                 .findFirst()
                 .orElse(null);
     }
+
 }

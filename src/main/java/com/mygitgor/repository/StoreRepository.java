@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 public interface StoreRepository extends JpaRepository<Store,Long> {
     Store findByName(String name);
 
-    @Query("SELECT s FROM Store s JOIN FETCH s.stocks WHERE s.name = :storeName")
+    @Query("SELECT s FROM Store s JOIN FETCH s.storeStocks WHERE s.name = :storeName")
     Store findByNameWithStocks(@Param("storeName") String storeName);
 
 }

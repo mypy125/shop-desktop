@@ -27,4 +27,5 @@ public class Product extends BaseEntity{
 
     @Temporal(TemporalType.DATE)
     private Date expirationDate;
+
 }
