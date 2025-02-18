@@ -5,6 +5,7 @@ import com.mygitgor.config.AppConfig;
 import com.mygitgor.service.ProductService;
 import com.mygitgor.service.StockService;
 import com.mygitgor.service.StoreService;
+import com.mygitgor.service.StoreStockService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -19,8 +20,9 @@ public class ShopDesktopApp {
             ProductService productService = context.getBean(ProductService.class);
             StockService stockService = context.getBean(StockService.class);
             StoreService storeService = context.getBean(StoreService.class);
+            StoreStockService storeStockService = context.getBean(StoreStockService.class);
 
-            Dashboard dashboard = new Dashboard(productService, stockService, storeService);
+            Dashboard dashboard = new Dashboard(productService, stockService, storeService,storeStockService);
             dashboard.setVisible(true);
         });
     }

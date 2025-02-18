@@ -138,24 +138,21 @@ public class StockPanel extends JPanel {
         }
     }
 
-    private void refreshStockTable() {
+    public void refreshStockTable() {
         List<Stock> stocks = stockService.findAllStocks();
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Product Code");
-        model.addColumn("Product Name");
         model.addColumn("Quantity");
 
         for (Stock stock : stocks) {
             Product product = stock.getProduct();
             if (product != null) {
                 model.addRow(new Object[]{
-                        stock.getProductCode(),
                         product.getCode(),
                         stock.getQuantity()
                 });
             } else {
                 model.addRow(new Object[]{
-                        stock.getProductCode(),
                         "N/A",
                         stock.getQuantity()
                 });

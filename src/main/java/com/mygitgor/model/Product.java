@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String code;
 
@@ -27,5 +27,4 @@ public class Product extends BaseEntity{
 
     @Temporal(TemporalType.DATE)
     private Date expirationDate;
-
 }

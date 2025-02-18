@@ -11,14 +11,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stock extends BaseEntity{
-    @Column(nullable = false)
-    private String productCode;
-
+public class Stock extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 
+    @Column(nullable = false)
     private int quantity;
 }
 
