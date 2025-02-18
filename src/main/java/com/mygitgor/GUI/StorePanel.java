@@ -41,12 +41,24 @@ public class StorePanel extends JPanel {
     private void initUI() {
         setLayout(new BorderLayout());
 
+        productCodeField = new JTextField();
+        quantityField = new JTextField();
+
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
+        inputPanel.add(new JLabel("Product Code:"));
+        inputPanel.add(productCodeField);
+        inputPanel.add(new JLabel("Quantity:"));
+        inputPanel.add(quantityField);
+
+        add(inputPanel, BorderLayout.NORTH);
+
         add(createTablesPanel(), BorderLayout.CENTER);
         add(createButtonPanel(), BorderLayout.SOUTH);
 
         refreshStoreTable();
         refreshStoreStockTable();
     }
+
 
     private JPanel createTablesPanel() {
         JPanel panel = new JPanel(new GridLayout(1, 2));
@@ -185,9 +197,45 @@ public class StorePanel extends JPanel {
     }
 
     private void returnProduct() {
-        processStockChange(storeStockService::addStoreStock, "return product to");
-        refreshStoreStockTable();
+        getSelectedStoreName().ifPresent(storeName -> {
+            try {
+                if (productCodeField == null || quantityField == null) {
+                    showError("Product code and quantity fields are not initialized.");
+                    return;
+                }
+
+                String productCode = productCodeField.getText().trim();
+                if (productCode.isEmpty()) {
+                    showError("Product code cannot be empty");
+                    return;
+                }
+
+                int quantity = Integer.parseInt(quantityField.getText().trim());
+                if (quantity <= 0) {
+                    showError("Quantity must be greater than 0");
+                    return;
+                }
+
+                storeService.returnProductToStock(storeName, productCode, quantity);
+                refreshStoreStockTable();
+
+                // Обновление панели StockPanel после возврата товара
+                Dashboard dashboard = (Dashboard) SwingUtilities.getWindowAncestor(this); // Получаем ссылку на Dashboard
+                if (dashboard != null) {
+                    dashboard.updateStockPanel(); // Обновляем StockPanel
+                }
+
+            } catch (NumberFormatException e) {
+                showError("Invalid quantity");
+            } catch (Exception e) {
+                showError("Error returning product to stock: " + e.getMessage());
+            }
+        });
     }
+
+
+
+
 
     private void addProductToStore() {
         processStockChange(storeStockService::addStoreStock, "add product to");

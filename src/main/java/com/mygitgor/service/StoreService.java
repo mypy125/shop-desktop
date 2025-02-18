@@ -12,5 +12,5 @@ public interface StoreService {
     List<Store> findAll();
     void deleteStore(String name);
     void deleteStore(Long id) throws Exception;
-
+    void returnProductToStock(String storeName, String productName, int quantity);
 }

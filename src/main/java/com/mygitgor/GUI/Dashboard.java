@@ -13,6 +13,7 @@ public class Dashboard extends JFrame {
     private StockService stockService;
     private StoreService storeService;
     private StoreStockService storeStockService;
+    private StockPanel stockPanel;
 
     public Dashboard(ProductService productService,
                      StockService stockService,
@@ -29,7 +30,7 @@ public class Dashboard extends JFrame {
 
         tabbedPane = new JTabbedPane();
 
-        StockPanel stockPanel = new StockPanel(stockService);
+        stockPanel = new StockPanel(stockService);
 
         tabbedPane.addTab("Products", new ProductPanel(productService));
         tabbedPane.addTab("Stock", stockPanel);
@@ -37,5 +38,10 @@ public class Dashboard extends JFrame {
 
         add(tabbedPane);
     }
+
+    public void updateStockPanel() {
+        stockPanel.refreshStockTable();
+    }
 }
+
 
