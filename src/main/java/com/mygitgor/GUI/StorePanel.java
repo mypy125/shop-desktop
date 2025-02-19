@@ -101,6 +101,9 @@ public class StorePanel extends JPanel {
         return button;
     }
 
+
+//=====================================START_STORE_FUNCTIONAL===================================================
+
     private void addStore() {
         JTextField nameField = new JTextField();
 
@@ -189,12 +192,11 @@ public class StorePanel extends JPanel {
         storeService.findAll().forEach(store -> storeTableModel.addRow(new Object[]{ store.getName()}));
     }
 
-    //=====================================end_store_function========================================
+//=====================================END_STORE_FUNCTIONAL===================================================
 
-    private void sellProduct() {
-        processStockChange(storeStockService::removeStoreStock, "sell product from");
-        refreshStoreStockTable();
-    }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//=====================================START_STORE_STOCK_FUNCTIONAL============================================
 
     private void returnProduct() {
         getSelectedStoreName().ifPresent(storeName -> {
@@ -219,12 +221,10 @@ public class StorePanel extends JPanel {
                 storeService.returnProductToStock(storeName, productCode, quantity);
                 refreshStoreStockTable();
 
-                // Обновление панели StockPanel после возврата товара
-                Dashboard dashboard = (Dashboard) SwingUtilities.getWindowAncestor(this); // Получаем ссылку на Dashboard
+                Dashboard dashboard = (Dashboard) SwingUtilities.getWindowAncestor(this);
                 if (dashboard != null) {
-                    dashboard.updateStockPanel(); // Обновляем StockPanel
+                    dashboard.updateStockPanel();
                 }
-
             } catch (NumberFormatException e) {
                 showError("Invalid quantity");
             } catch (Exception e) {
@@ -233,9 +233,10 @@ public class StorePanel extends JPanel {
         });
     }
 
-
-
-
+    private void sellProduct() {
+        processStockChange(storeStockService::removeStoreStock, "sell product from");
+        refreshStoreStockTable();
+    }
 
     private void addProductToStore() {
         processStockChange(storeStockService::addStoreStock, "add product to");

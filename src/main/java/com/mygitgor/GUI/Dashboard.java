@@ -14,6 +14,7 @@ public class Dashboard extends JFrame {
     private StoreService storeService;
     private StoreStockService storeStockService;
     private StockPanel stockPanel;
+    private ConfigPanel configPanel;
 
     public Dashboard(ProductService productService,
                      StockService stockService,
@@ -29,12 +30,14 @@ public class Dashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         tabbedPane = new JTabbedPane();
-
         stockPanel = new StockPanel(stockService);
+        configPanel = new ConfigPanel();
+        configPanel.initialize();
 
         tabbedPane.addTab("Products", new ProductPanel(productService));
         tabbedPane.addTab("Stock", stockPanel);
         tabbedPane.addTab("Stores", new StorePanel(storeService, storeStockService));
+        tabbedPane.addTab("Config", configPanel);
 
         add(tabbedPane);
     }
