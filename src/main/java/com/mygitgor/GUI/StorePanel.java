@@ -234,15 +234,21 @@ public class StorePanel extends JPanel {
     }
 
     private void sellProduct() {
+        // TODO: Ensure stock removal logic is correct and handle edge cases (e.g., insufficient stock)
         processStockChange(storeStockService::removeStoreStock, "sell product from");
+        // TODO: Consider updating UI or notifying users about stock changes
         refreshStoreStockTable();
     }
 
     private void addProductToStore() {
+        // TODO: Validate product details before adding stock (e.g., check for duplicates or invalid data)
         processStockChange(storeStockService::addStoreStock, "add product to");
+        // TODO: Implement UI feedback or logging to confirm successful stock addition
     }
 
     private void checkExpiredProducts() {
+        // TODO: Implement logic to check for expired products in the store stock
+        // TODO: Decide on handling expired products (e.g., remove them, notify users, or mark as expired)
         showInfo("Check expired products functionality not implemented yet");
     }
 
