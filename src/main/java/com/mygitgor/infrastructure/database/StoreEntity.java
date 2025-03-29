@@ -1,19 +1,19 @@
-package com.mygitgor.model;
+package com.mygitgor.infrastructure.database;
 
+import com.mygitgor.domain.model.StoreStock;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
+@Table(name = "payments")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Store extends BaseEntity {
+@Builder
+public class StoreEntity {
     @Column(unique = true, nullable = false)
     private String name;
 

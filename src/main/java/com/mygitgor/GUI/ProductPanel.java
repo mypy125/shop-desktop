@@ -1,6 +1,6 @@
 package com.mygitgor.GUI;
 
-import com.mygitgor.model.Product;
+import com.mygitgor.domain.model.Product;
 import com.mygitgor.service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

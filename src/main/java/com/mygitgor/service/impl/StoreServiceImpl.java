@@ -1,13 +1,13 @@
 package com.mygitgor.service.impl;
 
-import com.mygitgor.model.Product;
-import com.mygitgor.model.Stock;
-import com.mygitgor.model.Store;
-import com.mygitgor.model.StoreStock;
-import com.mygitgor.repository.ProductRepository;
-import com.mygitgor.repository.StockRepository;
-import com.mygitgor.repository.StoreRepository;
-import com.mygitgor.repository.StoreStockRepository;
+import com.mygitgor.domain.model.Product;
+import com.mygitgor.domain.model.Stock;
+import com.mygitgor.domain.model.Store;
+import com.mygitgor.domain.model.StoreStock;
+import com.mygitgor.domain.repository.ProductRepository;
+import com.mygitgor.domain.repository.StockRepository;
+import com.mygitgor.domain.repository.StoreRepository;
+import com.mygitgor.domain.repository.StoreStockRepository;
 import com.mygitgor.service.StoreService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

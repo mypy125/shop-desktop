@@ -1,17 +1,18 @@
-package com.mygitgor.model;
+package com.mygitgor.infrastructure.database;
 
+import com.mygitgor.domain.model.Stock;
+import com.mygitgor.domain.model.Store;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Table(name = "payments")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreStock extends BaseEntity {
+@Builder
+public class StoreStockEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
@@ -23,4 +24,3 @@ public class StoreStock extends BaseEntity {
     @Column(nullable = false)
     private int quantity;
 }
-

@@ -1,17 +1,17 @@
-package com.mygitgor.model;
+package com.mygitgor.infrastructure.database;
 
+import com.mygitgor.domain.model.Product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Table(name = "payments")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stock extends BaseEntity {
+@Builder
+public class StockEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
@@ -19,5 +19,3 @@ public class Stock extends BaseEntity {
     @Column(nullable = false)
     private int quantity;
 }
-
-

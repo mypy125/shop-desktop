@@ -1,7 +1,7 @@
 package com.mygitgor.service.impl;
 
-import com.mygitgor.model.Product;
-import com.mygitgor.repository.ProductRepository;
+import com.mygitgor.domain.model.Product;
+import com.mygitgor.domain.repository.ProductRepository;
 import com.mygitgor.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,7 @@
 package com.mygitgor.GUI;
 
-import com.mygitgor.model.Store;
-import com.mygitgor.model.StoreStock;
-import com.mygitgor.service.StockService;
+import com.mygitgor.domain.model.Store;
+import com.mygitgor.domain.model.StoreStock;
 import com.mygitgor.service.StoreService;
 import com.mygitgor.service.StoreStockService;
 import lombok.AllArgsConstructor;

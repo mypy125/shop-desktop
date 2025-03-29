@@ -1,6 +1,6 @@
 package com.mygitgor.service;
 
-import com.mygitgor.model.Store;
+import com.mygitgor.domain.model.Store;
 
 import java.util.List;
 

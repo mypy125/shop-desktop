@@ -1,4 +1,4 @@
-package com.mygitgor.model;
+package com.mygitgor.domain.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
