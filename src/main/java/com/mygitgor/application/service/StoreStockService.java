@@ -1,4 +1,4 @@
-package com.mygitgor.service;
+package com.mygitgor.application.service;
 
 
 import com.mygitgor.domain.model.StoreStock;

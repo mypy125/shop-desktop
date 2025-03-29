@@ -1,9 +1,9 @@
 package com.mygitgor.GUI;
 
-import com.mygitgor.service.ProductService;
-import com.mygitgor.service.StockService;
-import com.mygitgor.service.StoreService;
-import com.mygitgor.service.StoreStockService;
+import com.mygitgor.application.service.ProductService;
+import com.mygitgor.application.service.StockService;
+import com.mygitgor.application.service.StoreService;
+import com.mygitgor.application.service.StoreStockService;
 
 import javax.swing.*;
 

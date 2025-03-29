@@ -2,7 +2,7 @@ package com.mygitgor.GUI;
 
 import com.mygitgor.domain.model.Product;
 import com.mygitgor.domain.model.Stock;
-import com.mygitgor.service.StockService;
+import com.mygitgor.application.service.StockService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;

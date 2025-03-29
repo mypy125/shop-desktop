@@ -1,4 +1,4 @@
-package com.mygitgor.service.impl;
+package com.mygitgor.application.service.impl;
 
 import com.mygitgor.domain.model.Stock;
 import com.mygitgor.domain.model.StoreStock;
@@ -8,12 +8,13 @@ import com.mygitgor.domain.repository.ProductRepository;
 import com.mygitgor.domain.repository.StockRepository;
 import com.mygitgor.domain.repository.StoreRepository;
 import com.mygitgor.domain.repository.StoreStockRepository;
-import com.mygitgor.service.StoreStockService;
+import com.mygitgor.application.service.StoreStockService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,24 +33,24 @@ public class StoreStockServiceImpl implements StoreStockService {
             throw new IllegalArgumentException("Store not found");
         }
 
-        Product product = productRepository.findByCode(productCode);
-        if (product == null) {
+        Optional<Product> product = productRepository.findByCode(productCode);
+        if (product.isEmpty()) {
             throw new IllegalArgumentException("Product not found");
         }
 
-        Stock stock = stockRepository.findByProduct(product);
-        if (stock == null || stock.getQuantity() < quantity) {
+        Optional<Stock> stock = stockRepository.findByProduct(product.orElse(null));
+        if (stock.isEmpty() || stock.get().getQuantity() < quantity) {
             throw new IllegalArgumentException("Insufficient stock");
         }
 
-        stock.setQuantity(stock.getQuantity() - quantity);
-        stockRepository.save(stock);
+        stock.get().setQuantity(stock.get().getQuantity() - quantity);
+        stockRepository.save(stock.orElse(null));
 
-        StoreStock storeStock = storeStockRepository.findByStoreAndStock(store, stock);
+        StoreStock storeStock = storeStockRepository.findByStoreAndStock(store, stock.orElse(null));
         if (storeStock == null) {
             storeStock = new StoreStock();
             storeStock.setStore(store);
-            storeStock.setStock(stock);
+            storeStock.setStock(stock.get());
             storeStock.setQuantity(quantity);
         } else {
             storeStock.setQuantity(storeStock.getQuantity() + quantity);
@@ -66,17 +67,17 @@ public class StoreStockServiceImpl implements StoreStockService {
             throw new IllegalArgumentException("Store not found");
         }
 
-        Product product = productRepository.findByCode(productCode);
-        if (product == null) {
+        Optional<Product> product = productRepository.findByCode(productCode);
+        if (product.isEmpty()) {
             throw new IllegalArgumentException("Product not found");
         }
 
-        Stock stock = stockRepository.findByProduct(product);
-        if (stock == null) {
+        Optional<Stock> stock = stockRepository.findByProduct(product.orElse(null));
+        if (stock.isEmpty()) {
             throw new IllegalArgumentException("Stock not found");
         }
 
-        StoreStock storeStock = storeStockRepository.findByStoreAndStock(store, stock);
+        StoreStock storeStock = storeStockRepository.findByStoreAndStock(store, stock.orElse(null));
         if (storeStock == null || storeStock.getQuantity() < quantity) {
             throw new IllegalArgumentException("Insufficient store stock");
         }
@@ -84,8 +85,8 @@ public class StoreStockServiceImpl implements StoreStockService {
         storeStock.setQuantity(storeStock.getQuantity() - quantity);
         storeStockRepository.save(storeStock);
 
-        stock.setQuantity(stock.getQuantity() + quantity);
-        stockRepository.save(stock);
+        stock.get().setQuantity(stock.get().getQuantity() + quantity);
+        stockRepository.save(stock.orElse(null));
     }
 
     @Transactional(readOnly = true)
@@ -107,15 +108,15 @@ public class StoreStockServiceImpl implements StoreStockService {
     @Transactional(readOnly = true)
     @Override
     public List<StoreStock> findStoreStocksByProduct(String productCode) {
-        Product product = productRepository.findByCode(productCode);
-        if (product == null) {
+        Optional<Product> product = productRepository.findByCode(productCode);
+        if (product.isEmpty()) {
             throw new IllegalArgumentException("Product not found");
         }
-        Stock stock = stockRepository.findByProduct(product);
-        if (stock == null) {
+        Optional<Stock> stock = stockRepository.findByProduct(product.orElse(null));
+        if (stock.isEmpty()) {
             throw new IllegalArgumentException("Stock not found");
         }
-        return storeStockRepository.findByStock(stock);
+        return storeStockRepository.findByStock(stock.orElse(null));
     }
 }
 

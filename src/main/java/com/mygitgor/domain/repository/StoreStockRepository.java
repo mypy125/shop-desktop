@@ -10,4 +10,6 @@ public interface StoreStockRepository {
     List<StoreStock> findByStore(Store store);
     List<StoreStock> findByStock(Stock stock);
     StoreStock findByStoreAndStock(Store store, Stock stock);
+    List<StoreStock> findAll();
+    void save(StoreStock storeStock);
 }

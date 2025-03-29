@@ -1,14 +1,12 @@
 package com.mygitgor.infrastructure.database;
 
-import com.mygitgor.domain.model.StoreStock;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity
-@Table(name = "payments")
+@Table(name = "store")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,5 +17,5 @@ public class StoreEntity extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StoreStock> storeStocks;
+    private List<StoreStockEntity> storeStocks;
 }

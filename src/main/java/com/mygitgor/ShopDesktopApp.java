@@ -2,17 +2,21 @@ package com.mygitgor;
 
 import com.mygitgor.GUI.Dashboard;
 import com.mygitgor.config.AppConfig;
-import com.mygitgor.service.ProductService;
-import com.mygitgor.service.StockService;
-import com.mygitgor.service.StoreService;
-import com.mygitgor.service.StoreStockService;
+import com.mygitgor.application.service.ProductService;
+import com.mygitgor.application.service.StockService;
+import com.mygitgor.application.service.StoreService;
+import com.mygitgor.application.service.StoreStockService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.swing.*;
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.mygitgor.infrastructure.database.jpa")
+@EntityScan(basePackages = "com.mygitgor.infrastructure.database")
 public class ShopDesktopApp {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

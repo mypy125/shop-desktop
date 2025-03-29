@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
-@Table(name = "payments")
+@Table(name = "product")
 @Getter
 @Setter
 @NoArgsConstructor

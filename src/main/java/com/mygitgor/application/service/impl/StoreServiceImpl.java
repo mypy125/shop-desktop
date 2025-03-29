@@ -1,4 +1,4 @@
-package com.mygitgor.service.impl;
+package com.mygitgor.application.service.impl;
 
 import com.mygitgor.domain.model.Product;
 import com.mygitgor.domain.model.Stock;
@@ -8,12 +8,14 @@ import com.mygitgor.domain.repository.ProductRepository;
 import com.mygitgor.domain.repository.StockRepository;
 import com.mygitgor.domain.repository.StoreRepository;
 import com.mygitgor.domain.repository.StoreStockRepository;
-import com.mygitgor.service.StoreService;
+import com.mygitgor.application.service.StoreService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -36,9 +38,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store findById(Long id) throws Exception {
-        return storeRepository.findById(id)
-                .orElseThrow(()->new Exception("store not found by id"+id));
+    public Store findById(UUID id) {
+        return storeRepository.findById(id);
     }
 
     @Transactional
@@ -69,7 +70,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void deleteStore(Long id) throws Exception {
+    public void deleteStore(UUID id) throws Exception {
         Store store = findById(id);
         storeRepository.delete(store);
     }
@@ -86,30 +87,30 @@ public class StoreServiceImpl implements StoreService {
             throw new IllegalArgumentException("Store not found with name: " + storeName);
         }
 
-        Product product = productRepository.findByCode(productCode);
-        if (product == null) {
+        Optional<Product> product = productRepository.findByCode(productCode);
+        if (product.isEmpty()) {
             throw new IllegalArgumentException("Product not found with code: " + productCode);
         }
 
-        Stock stockByProduct = stockRepository.findByProduct(product);
-        if (stockByProduct == null) {
-            stockByProduct = new Stock();
-            stockByProduct.setProduct(product);
-            stockByProduct.setQuantity(0);
-            stockRepository.save(stockByProduct);
+        Optional<Stock> stockByProduct = stockRepository.findByProduct(product.orElse(null));
+        if (stockByProduct.isEmpty()) {
+            stockByProduct = Optional.of(new Stock());
+            stockByProduct.get().setProduct(product.get());
+            stockByProduct.get().setQuantity(0);
+            stockRepository.save(stockByProduct.orElse(null));
         }
 
-        StoreStock storeStock = storeStockRepository.findByStoreAndStock(store, stockByProduct);
+        StoreStock storeStock = storeStockRepository.findByStoreAndStock(store, stockByProduct.orElse(null));
 
         if (storeStock == null) {
             storeStock = new StoreStock();
             storeStock.setStore(store);
-            storeStock.setStock(stockByProduct);
+            storeStock.setStock(stockByProduct.get());
             storeStock.setQuantity(0);
         }
 
-        stockByProduct.setQuantity(stockByProduct.getQuantity() + quantity);
-        stockRepository.save(stockByProduct);
+        stockByProduct.get().setQuantity(stockByProduct.get().getQuantity() + quantity);
+        stockRepository.save(stockByProduct.orElse(null));
 
         storeStock.setQuantity(storeStock.getQuantity() - quantity);
         storeStockRepository.save(storeStock);

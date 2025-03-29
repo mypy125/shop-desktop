@@ -1,12 +1,13 @@
-package com.mygitgor.service;
+package com.mygitgor.application.service;
 
 import com.mygitgor.domain.model.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
-    void addProduct(Product product);
-    void updateProduct(Product product);
+    Product addProduct(Product product);
+    Product updateProduct(Product product);
     void deleteProduct(String code);
     Product findByCode(String code);
     List<Product> findAll();
