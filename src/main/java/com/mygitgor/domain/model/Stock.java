@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stock extends BaseEntity {
+public class Stock {
     private UUID id;
     private Product product;
     private int quantity;

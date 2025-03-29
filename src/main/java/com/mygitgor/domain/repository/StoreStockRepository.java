@@ -3,7 +3,6 @@ package com.mygitgor.domain.repository;
 import com.mygitgor.domain.model.Stock;
 import com.mygitgor.domain.model.Store;
 import com.mygitgor.domain.model.StoreStock;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
